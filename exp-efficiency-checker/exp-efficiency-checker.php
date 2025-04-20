@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Exp Efficiency Checker
  * Description: 無色石（BPC）とダイヤ（USD）のどちらが効率よく経験値を得られるか計算するショートコード [exp_efficiency_checker]
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      あなたの名前
  */
 
@@ -35,10 +35,16 @@ function ee_shortcode_callback() {
     ?>
     <div id="ee-checker" style="border:1px solid #ddd; padding:1em; max-width:400px;">
       <p>
-        <label>無色石価格 (BPC)&nbsp;
-          <input type="number" id="ee_price_bpc" value="1" step="0.0001" style="width:80px;">
+        <label>無色石購入個数&nbsp;
+          <input type="number" id="ee_qty" value="200" step="1" style="width:80px;">
         </label>
       </p>
+      <p>
+        <label>購入合計 BPC&nbsp;
+          <input type="number" id="ee_total_bpc" value="665" step="0.01" style="width:80px;">
+        </label>
+      </p>
+      <p>1個あたり BPC 価格: <span id="ee_bpc_per_stone">-</span> BPC</p>
       <p>BPC → USD レート：<span id="ee_bpc_usd"><?php echo esc_html( $bpc_usd_display ); ?></span> USD</p>
       <p>ダイヤ価格：0.01 USD/個</p>
       <p><button id="ee_calc">計算する</button></p>
@@ -52,9 +58,16 @@ function ee_shortcode_callback() {
       const pricePerDia = 0.01; // USD
 
       document.getElementById('ee_calc').addEventListener('click', function(){
-        const bpc     = parseFloat(document.getElementById('ee_price_bpc').value) || 0;
-        const bpcUsd  = parseFloat(document.getElementById('ee_bpc_usd').textContent) || 0;
-        const stoneUsd= bpc * bpcUsd;
+        const qty       = parseFloat(document.getElementById('ee_qty').value) || 0;
+        const totalBpc  = parseFloat(document.getElementById('ee_total_bpc').value) || 0;
+        const bpcUsd    = parseFloat(document.getElementById('ee_bpc_usd').textContent) || 0;
+
+        // 1個あたり BPC 価格を計算・表示
+        const perStoneBpc = qty > 0 ? (totalBpc / qty).toFixed(4) : '0.0000';
+        document.getElementById('ee_bpc_per_stone').textContent = perStoneBpc;
+
+        // 無色石の USD 換算価格
+        const stoneUsd = parseFloat(perStoneBpc) * bpcUsd;
         const rateStone = stoneUsd > 0 ? (expStone / stoneUsd).toFixed(2) : '0.00';
         const rateDia   = (expDia / pricePerDia).toFixed(2);
 
@@ -73,3 +86,4 @@ function ee_shortcode_callback() {
     return ob_get_clean();
 }
 add_shortcode( 'exp_efficiency_checker', 'ee_shortcode_callback' );
+?>
