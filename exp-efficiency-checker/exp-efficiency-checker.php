@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Exp Efficiency Checker
  * Description: 無色石（BPC）とダイヤ（USD）のどちらが効率よく経験値を得られるか計算するショートコード [exp_efficiency_checker]
- * Version:     1.2.0
+ * Version:     1.2.1
  * Author:      あなたの名前
  */
 
@@ -36,12 +36,12 @@ function ee_shortcode_callback() {
     <div id="ee-checker" style="border:1px solid #ddd; padding:1em; max-width:400px;">
       <p>
         <label>無色石購入個数&nbsp;
-          <input type="number" id="ee_qty" value="200" step="1" style="width:80px;">
+          <input type="number" id="ee_qty" placeholder="購入する石の個数を入力" step="1" style="width:120px;">
         </label>
       </p>
       <p>
         <label>購入合計 BPC&nbsp;
-          <input type="number" id="ee_total_bpc" value="665" step="0.01" style="width:80px;">
+          <input type="number" id="ee_total_bpc" placeholder="合計で支払うBPC数を入力" step="0.01" style="width:120px;">
         </label>
       </p>
       <p>1個あたり BPC 価格: <span id="ee_bpc_per_stone">-</span> BPC</p>
